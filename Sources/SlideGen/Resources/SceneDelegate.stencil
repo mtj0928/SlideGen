@@ -1,0 +1,39 @@
+//
+//  SceneDelegate.swift
+//
+//  This file is automatically generates by SlideKit
+//
+
+import SlideKit
+import SwiftUI
+import UIKit
+
+final class SceneDelegate: NSObject, SlideWindowSceneDelegate {
+
+    /// A size of you slide
+    static let slideSize = SlideSize.standard16_9
+
+    /// A manager which handle external display.
+    static let externalDisplayManager = ExternalDisplayManager(slideIndexController: slideIndexController)
+
+    /// A slideIndexController. Add your slides to it's trailing closure.
+    static let slideIndexController = SlideIndexController(index: 0) {
+        // Add your slide here.
+        SampleSlide()
+    }
+
+    var window: UIWindow?
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+
+        if session.role == .externalDisplay && Self.externalDisplayManager.externalDisplayMode == .mirroring {
+            return
+        }
+
+        self.window = makeRootWindow(
+            windowScene: windowScene,
+            slidePresentationMode: session.role == .externalDisplay ? .presentation : .presenter
+        )
+    }
+}
