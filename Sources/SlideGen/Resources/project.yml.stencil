@@ -2,7 +2,7 @@ name: {{productName}}
 packages:
   SlideKit:
     url: https://github.com/mtj0928/SlideKit
-    from: 0.0.3
+    from: 0.0.1
 targets:
   {{productName}}:
     type: application
