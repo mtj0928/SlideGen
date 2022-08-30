@@ -27,7 +27,7 @@ struct SlideGen: ParsableCommand {
             logger.error("\(productName) exist.")
             return
         }
-        try FileManager.default.createDirectory(atPath: productName + "/" + productName, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(atPath: productName + "/" + productName + "/Slides", withIntermediateDirectories: true)
         try copySwiftFiles()
         try copyFile(templateName: "Info.plist")
         try copyFile(templateName: "project.yml", filePath: URL(fileURLWithPath: "./\(productName)/project.yml"))
