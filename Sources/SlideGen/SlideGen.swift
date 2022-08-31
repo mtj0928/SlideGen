@@ -4,12 +4,9 @@ import Logging
 import Stencil
 import PathKit
 import ProjectSpec
-import Version
 import XcodeGenKit
 
 let logger = Logger(label: "net.matsuji.slidegen")
-
-let xcodeGenVersion = Version("2.32.0")
 
 @main
 struct SlideGen: ParsableCommand {
@@ -19,33 +16,37 @@ struct SlideGen: ParsableCommand {
     var platform: SupportedPlatform = .iOS
 
     mutating func run() throws {
-        guard platform == .iOS else {
-            logger.error("macOS isn't supported now. It's a good chance to contribute SlideKit!")
-            return
-        }
         guard !FileManager.default.fileExists(atPath: productName) else {
             logger.error("\(productName) exist.")
             return
         }
         try FileManager.default.createDirectory(atPath: productName + "/" + productName + "/Slides", withIntermediateDirectories: true)
-        try copySwiftFiles()
-        try copyFile(templateName: "Info.plist")
-        try copyFile(templateName: "project.yml", filePath: URL(fileURLWithPath: "./\(productName)/project.yml"))
+
+        switch platform {
+        case .iOS:
+            try copySwiftFile(templateName: "AppDelegate.swift")
+            try copySwiftFile(templateName: "SceneDelegate.swift")
+            try copySwiftFile(templateName: "SampleSlide.swift", fileName: "Slides/SampleSlide.swift")
+            try copyFile(templateName: "Info.plist")
+            try copyFile(templateName: "project.yml", filePath: URL(fileURLWithPath: "./\(productName)/project.yml"))
+        case .macOS:
+            try copySwiftFile(templateName: "App.swift", fileName: productName + "_App.swift")
+            try copySwiftFile(templateName: "SampleSlide.swift", fileName: "Slides/SampleSlide.swift")
+            try copyFile(templateName: "Info.plist")
+            try copyFile(
+                templateName: "ProductName.entitlements",
+                filePath: URL(fileURLWithPath: "./\(productName)/\(productName)/\(productName).entitlements")
+            )
+            try copyFile(templateName: "project.yml", filePath: URL(fileURLWithPath: "./\(productName)/project.yml"))
+        }
         try makeXcodeProject()
         logger.info("Creating \(productName) has been succeeded.")
-    }
-
-    private func copySwiftFiles() throws {
-        try copySwiftFile(templateName: "AppDelegate")
-        try copySwiftFile(templateName: "SceneDelegate")
-        try copySwiftFile(templateName: "App", fileName: productName + "_App")
-        try copySwiftFile(templateName: "SampleSlide", fileName: "Slides/SampleSlide")
     }
 
     private func copySwiftFile(templateName: String, fileName: String? = nil) throws {
         try copyFile(
             templateName: templateName,
-            filePath: URL(fileURLWithPath: "./\(productName)/\(productName)/\(fileName ?? templateName).swift")
+            filePath: URL(fileURLWithPath: "./\(productName)/\(productName)/" + (fileName ?? templateName))
         )
     }
 
@@ -53,8 +54,11 @@ struct SlideGen: ParsableCommand {
         let fileSystemLoader = FileSystemLoader(bundle: [Bundle.main, Bundle.module])
         let environment = Environment(loader: fileSystemLoader)
 
-        let context = ["productName": productName]
-        let content = try environment.renderTemplate(name: templateName + ".stencil", context: context)
+        let context = [
+            "productName": productName,
+            "slideKitVersion": slideKitVersion.description
+        ]
+        let content = try environment.renderTemplate(name: platform.rawValue + "_" + templateName + ".stencil", context: context)
         let url = filePath ?? URL(fileURLWithPath: "./\(productName)/\(productName)/\(templateName)")
         logger.debug("Writing to \(url.absoluteString)")
         try content.write(to: url, atomically: true, encoding: .utf8)
@@ -77,6 +81,6 @@ struct SlideGen: ParsableCommand {
 }
 
 enum SupportedPlatform: String, Codable, ExpressibleByArgument {
-    case mac
+    case macOS
     case iOS
 }

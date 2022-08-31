@@ -2,7 +2,7 @@ name: {{productName}}
 packages:
   SlideKit:
     url: https://github.com/mtj0928/SlideKit
-    from: 0.0.1
+    from: {{slideKitVersion}}
 targets:
   {{productName}}:
     type: application
@@ -12,8 +12,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.github.mtj0928.SlideKit.demo.{{productName}}
         MARKETING_VERSION: 1.0.0
         CURRENT_PROJECT_VERSION: 1
-    platform: iOS
-    deploymentTarget: "15.0"
+    platform: macOS
+    deploymentTarget: "12.0"
     sources: [{{productName}}]
     dependencies:
       - package: SlideKit
