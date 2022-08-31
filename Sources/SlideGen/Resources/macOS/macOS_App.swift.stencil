@@ -34,7 +34,7 @@ struct {{productName}}_App: App {
             }
 
             CommandGroup(after: .windowList) {
-                Button("Open Presenter Window") { NSWorkspace.shared.open(URL(string: "slide://editor")!) }
+                Button("Open Presenter Window") { NSWorkspace.shared.open(URL(string: "{{productName}}://editor")!) }
                     .keyboardShortcut("p", modifiers: .command)
             }
         }
