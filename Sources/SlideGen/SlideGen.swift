@@ -13,7 +13,7 @@ struct SlideGen: ParsableCommand {
     @Argument var productName: String
 
     @Option(name: .shortAndLong, help: "A project platform")
-    var platform: SupportedPlatform = .iOS
+    var platform: SupportedPlatform = .macOS
 
     mutating func run() throws {
         guard !FileManager.default.fileExists(atPath: productName) else {
@@ -31,6 +31,7 @@ struct SlideGen: ParsableCommand {
             try copyFile(templateName: "project.yml", filePath: URL(fileURLWithPath: "./\(productName)/project.yml"))
         case .macOS:
             try copySwiftFile(templateName: "App.swift", fileName: productName + "_App.swift")
+            try copySwiftFile(templateName: "SlideConfiguration.swift")
             try copySwiftFile(templateName: "SampleSlide.swift", fileName: "Slides/SampleSlide.swift")
             try copyFile(templateName: "Info.plist")
             try copyFile(
