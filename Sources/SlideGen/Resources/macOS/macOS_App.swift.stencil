@@ -1,7 +1,7 @@
 //
 //  {{productName}}.swift
 //
-//  Created by Junnosuke Matsumoto on 2022/08/26.
+//  This file is automatically generates by SlideGen
 //
 
 import SwiftUI
@@ -10,13 +10,11 @@ import SlideKit
 @main
 struct {{productName}}_App: App {
 
-    /// Please edit the default value to the size you want
-    let slideSize = SlideSize.standard16_9
+    /// Edit slide configurations in SlideConfiguration.swift
+    private static let configuration = SlideConfiguration()
 
-    //// Please add your slide into the trailing closure
-    let slideIndexController = SlideIndexController {
-        SampleSlide()
-    }
+    private let slideSize = Self.configuration.size
+    private let slideIndexController = Self.configuration.slideIndexController
 
     var body: some Scene {
         WindowGroup {

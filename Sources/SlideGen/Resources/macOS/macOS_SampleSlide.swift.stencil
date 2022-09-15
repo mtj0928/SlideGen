@@ -1,6 +1,8 @@
 //
 //  SampleSlide.swift
 //
+//  This file is automatically generates by SlideGen
+//
 
 import SlideKit
 import SwiftUI
