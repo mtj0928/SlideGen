@@ -1,5 +1,5 @@
 //
-//  {{productName}}.swift
+//  {{productName}}App.swift
 //
 //  This file is automatically generates by SlideGen
 //
@@ -8,7 +8,7 @@ import SwiftUI
 import SlideKit
 
 @main
-struct {{productName}}_App: App {
+struct {{productName}}App: App {
 
     /// Edit slide configurations in SlideConfiguration.swift
     private static let configuration = SlideConfiguration()

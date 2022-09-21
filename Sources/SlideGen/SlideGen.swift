@@ -30,7 +30,7 @@ struct SlideGen: ParsableCommand {
             try copyFile(templateName: "Info.plist")
             try copyFile(templateName: "project.yml", filePath: URL(fileURLWithPath: "./\(productName)/project.yml"))
         case .macOS:
-            try copySwiftFile(templateName: "App.swift", fileName: productName + "_App.swift")
+            try copySwiftFile(templateName: "App.swift", fileName: productName + "App.swift")
             try copySwiftFile(templateName: "SlideConfiguration.swift")
             try copySwiftFile(templateName: "SampleSlide.swift", fileName: "Slides/SampleSlide.swift")
             try copyFile(templateName: "Info.plist")
