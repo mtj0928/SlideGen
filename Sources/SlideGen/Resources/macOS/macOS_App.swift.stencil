@@ -13,49 +13,29 @@ struct {{productName}}App: App {
     /// Edit slide configurations in SlideConfiguration.swift
     private static let configuration = SlideConfiguration()
 
-    private let slideSize = Self.configuration.size
-    private let slideIndexController = Self.configuration.slideIndexController
+    /// A presentation content view.
+    /// Edit the view here if you'd like to set environments, overlay views or background views.
+    var presentationContentView: some View {
+        SlideRouterView(slideIndexController: Self.configuration.slideIndexController)
+            .background(.white)
+    }
 
     var body: some Scene {
         WindowGroup {
-            PresentationView(slideSize: slideSize) {
-                SlideRouterView(slideIndexController: slideIndexController)
-                    .background(.white)
+            PresentationView(slideSize: Self.configuration.size) {
+                presentationContentView
             }
         }
-        .windowStyle(.hiddenTitleBar)
-        .commands {
-            CommandGroup(after: .undoRedo) {
-                forwardButton(.rightArrow)
-                forwardButton(.return)
-                backButton(.leftArrow)
-            }
-
-            CommandGroup(after: .windowList) {
-                Button("Open Presenter Window") { NSWorkspace.shared.open(URL(string: "{{productName}}://editor")!) }
-                    .keyboardShortcut("p", modifiers: .command)
-            }
-        }
+        .setupAsPresentationWindow(Self.configuration.slideIndexController, appName: {{productName}})
 
         WindowGroup {
-            macOSPresenterView(slideSize: slideSize, slideIndexController: slideIndexController) {
-                SlideRouterView(slideIndexController: slideIndexController)
-                    .background(.white)
+            macOSPresenterView(
+                slideSize: Self.configuration.size,
+                slideIndexController: Self.configuration.slideIndexController
+            ) {
+                presentationContentView
             }
         }
-        .handlesExternalEvents(matching: ["editor"])
-    }
-}
-
-extension {{productName}}_App {
-
-    private func forwardButton(_ key: KeyEquivalent) -> some View {
-        Button("forward") { slideIndexController.forward() }
-            .keyboardShortcut(key, modifiers: [])
-    }
-
-    private func backButton(_ key: KeyEquivalent) -> some View {
-        Button("back") { slideIndexController.back() }
-            .keyboardShortcut(key, modifiers: [])
+        .setupAsPresenterWindow()
     }
 }
