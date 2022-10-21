@@ -18,6 +18,7 @@ struct {{productName}}App: App {
     var presentationContentView: some View {
         SlideRouterView(slideIndexController: Self.configuration.slideIndexController)
             .background(.white)
+            .foregroundColor(.black)
     }
 
     var body: some Scene {
