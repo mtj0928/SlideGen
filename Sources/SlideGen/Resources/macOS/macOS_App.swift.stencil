@@ -28,6 +28,7 @@ struct {{productName}}App: App {
             }
         }
         .setupAsPresentationWindow(Self.configuration.slideIndexController, appName: "{{productName}}")
+        .addPDFExportCommands(for: presentationContentView, with: Self.configuration.slideIndexController, size: Self.configuration.size)
 
         WindowGroup {
             macOSPresenterView(
