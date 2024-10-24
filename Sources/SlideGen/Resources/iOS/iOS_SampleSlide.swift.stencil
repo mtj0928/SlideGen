@@ -7,7 +7,8 @@
 import SlideKit
 import SwiftUI
 
-struct SampleSlide: Slide {
+@Slide
+struct SampleSlide: View {
     var body: some View {
         HeaderSlide("Sample Slide") {
             Item("This is a sample slide.") {
@@ -18,10 +19,8 @@ struct SampleSlide: Slide {
     }
 }
 
-struct SampleSlide_Previews: PreviewProvider {
-    static var previews: some View {
-        SlidePreview {
-            SampleSlide()
-        }
+#Preview {
+    SlidePreview {
+        SampleSlide()
     }
 }
