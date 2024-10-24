@@ -66,6 +66,10 @@ struct SlideGen: ParsableCommand {
     }
 
     private func makeXcodeProject() throws {
+        guard let userName = ProcessInfo.processInfo.environment["LOGNAME"] else {
+            logger.error("No user name, please set $LOGNAME")
+            return
+        }
         let specLoader = SpecLoader(version: xcodeGenVersion)
         let project = try specLoader.loadProject(path: Path("./\(productName)/project.yml"))
         try specLoader.validateProjectDictionaryWarnings()
@@ -76,7 +80,7 @@ struct SlideGen: ParsableCommand {
         let fileWriter = FileWriter(project: project)
         try fileWriter.writePlists()
         let projectGenerator = ProjectGenerator(project: project)
-        let xcodeProject = try projectGenerator.generateXcodeProject(in: Path("./\(project.name)/"))
+        let xcodeProject = try projectGenerator.generateXcodeProject(in: Path("./\(project.name)/"), userName: userName)
         try fileWriter.writeXcodeProject(xcodeProject, to: Path(projectPath))
     }
 }
