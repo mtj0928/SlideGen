@@ -12,7 +12,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.5.0"),
         .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.15.1"),
-        .package(url: "https://github.com/yonaskolb/XcodeGen.git", from: "2.42.0"),
+        .package(url: "https://github.com/yonaskolb/XcodeGen.git", from: "2.43.0"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.6.1"),
     ],
     targets: [

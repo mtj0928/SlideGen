@@ -28,7 +28,6 @@ struct SlideGen: ParsableCommand {
             try copySwiftFile(templateName: "SceneDelegate.swift")
             try copySwiftFile(templateName: "SampleSlide.swift", fileName: "Slides/SampleSlide.swift")
             try copyFile(templateName: "Info.plist")
-            try copyFile(templateName: "project.yml", filePath: URL(fileURLWithPath: "./\(productName)/project.yml"))
         case .macOS:
             try copySwiftFile(templateName: "App.swift", fileName: productName + "App.swift")
             try copySwiftFile(templateName: "SlideConfiguration.swift")
@@ -38,9 +37,11 @@ struct SlideGen: ParsableCommand {
                 templateName: "ProductName.entitlements",
                 filePath: URL(fileURLWithPath: "./\(productName)/\(productName)/\(productName).entitlements")
             )
-            try copyFile(templateName: "project.yml", filePath: URL(fileURLWithPath: "./\(productName)/project.yml"))
         }
+        let projectYmlPath = URL(fileURLWithPath: "./\(productName)/project.yml")
+        try copyFile(templateName: "project.yml", filePath: projectYmlPath)
         try makeXcodeProject()
+        try? FileManager.default.removeItem(at: projectYmlPath)
         logger.info("Creating \(productName) has been succeeded.")
     }
 

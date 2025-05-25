@@ -13,7 +13,7 @@ targets:
         MARKETING_VERSION: 1.0.0
         CURRENT_PROJECT_VERSION: 1
     platform: macOS
-    deploymentTarget: "12.0"
+    deploymentTarget: 14.0
     sources: [{{productName}}]
     dependencies:
       - package: SlideKit
