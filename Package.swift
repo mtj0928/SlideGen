@@ -12,13 +12,14 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.5.0"),
         .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.15.1"),
-        .package(url: "https://github.com/yonaskolb/XcodeGen.git", from: "2.43.0"),
+        .package(url: "https://github.com/yonaskolb/XcodeGen.git", from: "2.44.1"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.6.1"),
     ],
     targets: [
         .executableTarget(
             name: "SlideGen",
             dependencies: [
+                "SlideGenCore",
                 .product(name: "Stencil", package: "Stencil"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "XcodeGenKit", package: "XcodeGen"),
@@ -28,6 +29,11 @@ let package = Package(
             resources: [
                 .process("Resources")
             ]
+        ),
+        .target(name: "SlideGenCore"),
+        .testTarget(
+            name: "SlideGenCoreTests",
+            dependencies: ["SlideGenCore"]
         ),
     ]
 )

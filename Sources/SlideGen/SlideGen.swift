@@ -4,16 +4,24 @@ import Logging
 import Stencil
 import PathKit
 import ProjectSpec
+import SlideGenCore
 import XcodeGenKit
 
 let logger = Logger(label: "net.matsuji.slidegen")
 
 @main
 struct SlideGen: ParsableCommand {
+
+    static let configuration = CommandConfiguration(commandName: "slidegen")
+
     @Argument var productName: String
 
     @Option(name: .shortAndLong, help: "A project platform")
     var platform: SupportedPlatform = .macOS
+
+    private var productNameIdentifier: String {
+        ProductNameSanitizer.makeIdentifier(from: productName)
+    }
 
     mutating func run() throws {
         guard !FileManager.default.fileExists(atPath: productName) else {
@@ -29,7 +37,7 @@ struct SlideGen: ParsableCommand {
             try copySwiftFile(templateName: "SampleSlide.swift", fileName: "Slides/SampleSlide.swift")
             try copyFile(templateName: "Info.plist")
         case .macOS:
-            try copySwiftFile(templateName: "App.swift", fileName: productName + "App.swift")
+            try copySwiftFile(templateName: "App.swift", fileName: productNameIdentifier + "App.swift")
             try copySwiftFile(templateName: "SlideConfiguration.swift")
             try copySwiftFile(templateName: "SampleSlide.swift", fileName: "Slides/SampleSlide.swift")
             try copyFile(templateName: "Info.plist")
@@ -58,6 +66,7 @@ struct SlideGen: ParsableCommand {
 
         let context = [
             "productName": productName,
+            "productNameIdentifier": productNameIdentifier,
             "slideKitVersion": slideKitVersion.description
         ]
         let content = try environment.renderTemplate(name: platform.rawValue + "_" + templateName + ".stencil", context: context)
