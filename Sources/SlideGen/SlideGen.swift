@@ -46,6 +46,10 @@ struct SlideGen: ParsableCommand {
                 filePath: URL(fileURLWithPath: "./\(productName)/\(productName)/\(productName).entitlements")
             )
         }
+        try copyFile(
+            templateName: "AssetsCatalogContents.json",
+            filePath: URL(fileURLWithPath: "./\(productName)/\(productName)/Assets.xcassets/Contents.json")
+        )
         let projectYmlPath = URL(fileURLWithPath: "./\(productName)/project.yml")
         try copyFile(templateName: "project.yml", filePath: projectYmlPath)
         try makeXcodeProject()
@@ -72,6 +76,7 @@ struct SlideGen: ParsableCommand {
         let content = try environment.renderTemplate(name: platform.rawValue + "_" + templateName + ".stencil", context: context)
         let url = filePath ?? URL(fileURLWithPath: "./\(productName)/\(productName)/\(templateName)")
         logger.debug("Writing to \(url.absoluteString)")
+        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
         try content.write(to: url, atomically: true, encoding: .utf8)
     }
 
