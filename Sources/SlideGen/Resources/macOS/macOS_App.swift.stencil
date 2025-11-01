@@ -28,7 +28,7 @@ struct {{productNameIdentifier}}App: App {
             }
         }
         .setupAsPresentationWindow(Self.configuration.slideIndexController) {
-            NSWorkspace.shared.open(URL(string: "Foo://editor")!)
+            NSWorkspace.shared.open(URL(string: "{{productName}}://editor")!)
         }
         .addPDFExportCommands(for: presentationContentView, with: Self.configuration.slideIndexController, size: Self.configuration.size)
 
