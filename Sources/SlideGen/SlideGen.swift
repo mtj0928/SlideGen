@@ -65,7 +65,10 @@ struct SlideGen: ParsableCommand {
     }
 
     private func copyFile(templateName: String, filePath: URL? = nil) throws {
-        let fileSystemLoader = FileSystemLoader(bundle: [Bundle.main, Bundle.module])
+        // Use resourcePath instead of bundlePath: Swift Build (the default build system since Swift 6.4)
+        // emits resource bundles with a Contents/Resources layout, where templates are not at the bundle root.
+        let templatePaths = [Bundle.main, Bundle.module].compactMap(\.resourcePath).map { Path($0) }
+        let fileSystemLoader = FileSystemLoader(paths: templatePaths)
         let environment = Environment(loader: fileSystemLoader)
 
         let context = [
